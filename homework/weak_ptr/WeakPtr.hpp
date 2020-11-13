@@ -4,8 +4,10 @@
 
 template <typename T>
 class WeakPtr {
-friend class SharedPtr;
 public:
+    template <typename TT>
+    friend class SharedPtr;
+    
     constexpr WeakPtr() noexcept = default;
     WeakPtr(const WeakPtr<T>& otherPtr) noexcept;
     WeakPtr(const SharedPtr<T>& otherPtr) noexcept;
