@@ -18,10 +18,7 @@ set(PTR_SRC
 enable_testing()
 add_test(NAME ${TEST_NAME} COMMAND ${EXECUTABLE_TEST_FILE})
 
-add_library(lib STATIC ${PTR_SRC} )
 add_executable(${EXECUTABLE_MAIN_FILE} main.cpp)
 add_executable(${EXECUTABLE_TEST_FILE} ./tests/tests.cpp ./tests/testMain.cpp)
-target_link_libraries(${EXECUTABLE_MAIN_FILE} lib)
-target_link_libraries(${EXECUTABLE_TEST_FILE} lib)
 target_compile_options(${EXECUTABLE_MAIN_FILE} PRIVATE -Wall -Wextra -Werror -pedantic -std=c++17)
 target_compile_options(${EXECUTABLE_TEST_FILE} PRIVATE -Wall -Wextra -Werror -pedantic -std=c++17)
