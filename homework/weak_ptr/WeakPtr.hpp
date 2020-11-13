@@ -37,14 +37,12 @@ void WeakPtr<T>::controlBlockRemover() {
 
 template <typename T>
 void WeakPtr<T>::weakCounterDecrementer() {
-    controlBlock_->weakRefsCounter_.exchange(controlBlock_->weakRefsCounter_.load(std::memory_order_relaxed) - 1,
-                                             std::memory_order_relaxed);
+    controlBlock_->weakRefsCounter_--;
 }
 
 template <typename T>
 void WeakPtr<T>::weakCounterIncrementer() {
-    controlBlock_->weakRefsCounter_.exchange(controlBlock_->weakRefsCounter_.load(std::memory_order_relaxed) + 1,
-                                             std::memory_order_relaxed);
+    controlBlock_->weakRefsCounter_++;
 }
 
 template <typename T>
