@@ -19,42 +19,43 @@ public:
     bool expired() const noexcept;
     SharedPtr<T> lock() const noexcept;
     void reset() noexcept;
-    void controlBlockRemover();
-    void weakCounterDecrementer();
-    void weakCounterIncrementer();
 
 private:
+    void removeControlBlock();
+    void decrementWeakCounter();
+    void incrementWeakCounter();
+    
     T* rawPtr_;
     ControlBlock<T>* controlBlock_;
 };
 
 template <typename T>
-void WeakPtr<T>::controlBlockRemover() {
+void WeakPtr<T>::removeControlBlock() {
     if (controlBlock_->sharedRefsCounter_ == 0 && controlBlock_->weakRefsCounter_ == 0) {
         delete controlBlock_;
     }
 }
 
 template <typename T>
-void WeakPtr<T>::weakCounterDecrementer() {
+void WeakPtr<T>::decrementWeakCounter() {
     controlBlock_->weakRefsCounter_--;
 }
 
 template <typename T>
-void WeakPtr<T>::weakCounterIncrementer() {
+void WeakPtr<T>::incrementWeakCounter() {
     controlBlock_->weakRefsCounter_++;
 }
 
 template <typename T>
 WeakPtr<T>::WeakPtr(const SharedPtr<T>& otherPtr) noexcept
-    : rawPtr_(otherPtr.get()), controlBlock_(otherPtr.getControlBlock()) {
-    weakCounterIncrementer();
+    : rawPtr_(otherPtr.get()), controlBlock_(otherPtr.controlBlock_) {
+    incrementWeakCounter();
 }
 
 template <typename T>
 WeakPtr<T>::WeakPtr(const WeakPtr<T>& otherPtr) noexcept
     : rawPtr_(otherPtr.rawPtr_), controlBlock_(otherPtr.controlBlock_) {
-    weakCounterIncrementer();
+    incrementWeakCounter();
 }
 
 template <typename T>
@@ -67,8 +68,8 @@ WeakPtr<T>::WeakPtr(WeakPtr<T>&& otherPtr) noexcept
 template <typename T>
 WeakPtr<T>::~WeakPtr() {
     if (controlBlock_) {
-        weakCounterDecrementer();
-        controlBlockRemover();
+        decrementWeakCounter();
+        removeControlBlock();
     }
 }
 
@@ -77,7 +78,7 @@ WeakPtr<T>& WeakPtr<T>::operator=(const WeakPtr& otherPtr) noexcept {
     if (this != &otherPtr) {
         rawPtr_ = otherPtr.rawPtr_;
         controlBlock_ = otherPtr.controlBlock_;
-        weakCounterIncrementer();
+        incrementWeakCounter();
     }
     return *this;
 }
@@ -87,7 +88,7 @@ WeakPtr<T>& WeakPtr<T>::operator=(const SharedPtr<T>& otherPtr) noexcept {
     if (controlBlock_) {
         rawPtr_ = otherPtr.rawPtr_;
         controlBlock_ = otherPtr.controlBlock_;
-        weakCounterIncrementer();
+        incrementWeakCounter();
     }
     return *this;
 }
@@ -128,8 +129,8 @@ template <typename T>
 void WeakPtr<T>::reset() noexcept {
     rawPtr_ = nullptr;
     if (controlBlock_) {
-        weakCounterDecrementer();
-        controlBlockRemover();
+        decrementWeakCounter();
+        removeControlBlock();
     } else {
         controlBlock_ = nullptr;
     }

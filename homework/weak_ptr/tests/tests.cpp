@@ -5,16 +5,6 @@
 constexpr size_t power = 200;
 
 SCENARIO("Testing all WeakPtr functions") {
-    GIVEN("SharedPtr of Scooter with Power = 200") {
-        SharedPtr<Scooter> sharedscooter(new Scooter(power));
-        WHEN("making a WeakPtr from SharedPtr") {
-            WeakPtr<Scooter> weakscooter(sharedscooter);
-            THEN("made a WeakPtr without any problems") {
-                REQUIRE(Catch::isOk);
-            }
-        }
-    }
-
     GIVEN("WeakPtr made of SharedPtr of Scooter with Power = 200") {
         SharedPtr<Scooter> sharedscooter(new Scooter(power));
         WeakPtr<Scooter> weakscooter(sharedscooter);
@@ -32,7 +22,6 @@ SCENARIO("Testing all WeakPtr functions") {
             WeakPtr<Scooter> weakscooter(sharedscooter);
             THEN("both shared counter and weak counter should equals 1") {
                 REQUIRE(weakscooter.useCount() == 1);
-                REQUIRE(weakscooter.useSCount() == 1);
             }
         }
     }
@@ -43,9 +32,8 @@ SCENARIO("Testing all WeakPtr functions") {
         SharedPtr<Scooter> sharedscooter3(sharedscooter);
         WHEN("making a WeakPtr from SharedPtr") {
             WeakPtr<Scooter> weakscooter(sharedscooter);
-            THEN("useCount should return 1 and useSCount should return 3") {
+            THEN("useCount should return 1") {
                 REQUIRE(weakscooter.useCount() == 1);
-                REQUIRE(weakscooter.useSCount() == 3);
             }
         }
     }
@@ -71,3 +59,5 @@ SCENARIO("Testing all WeakPtr functions") {
         }
     }
 }
+
+//lock()
