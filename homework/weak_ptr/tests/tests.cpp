@@ -43,7 +43,7 @@ SCENARIO("Testing all WeakPtr functions") {
         WHEN("making a WeakPtr") {
             WeakPtr<Scooter> weakscooter(sharedscooter);
             THEN("WeakPtr shouldn't expired") {
-                REQUIRE(weakscooter.expired() == false);
+                REQUIRE_FALSE(weakscooter.expired());
             }
         }
     }
@@ -60,4 +60,4 @@ SCENARIO("Testing all WeakPtr functions") {
     }
 }
 
-//lock()
+//to test: lock()
