@@ -16,7 +16,6 @@ public:
     WeakPtr& operator=(WeakPtr&& otherPtr) noexcept;
 
     size_t useCount() const noexcept;
-    size_t useSCount() const noexcept;
     bool expired() const noexcept;
     SharedPtr<T> lock() const noexcept;
     void reset() noexcept;
@@ -108,11 +107,6 @@ WeakPtr<T>& WeakPtr<T>::operator=(WeakPtr&& otherPtr) noexcept {
 
 template <typename T>
 size_t WeakPtr<T>::useCount() const noexcept {
-    return controlBlock_->weakRefsCounter_;
-}
-
-template <typename T>
-size_t WeakPtr<T>::useSCount() const noexcept {
     return controlBlock_->sharedRefsCounter_;
 }
 
