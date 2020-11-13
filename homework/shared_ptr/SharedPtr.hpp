@@ -17,6 +17,9 @@ public:
 template <typename T> class SharedPtr {
 friend class WeakPtr;
 public:
+  template <typename TT>
+  friend class WeakPtr;
+  
   SharedPtr(T *rawPtr = nullptr);
   SharedPtr(SharedPtr<T> &&other) noexcept; // move constructor
   SharedPtr(const SharedPtr<T> &other);     // copy constructor
