@@ -111,10 +111,7 @@ size_t WeakPtr<T>::useCount() const noexcept {
 
 template <typename T>
 bool WeakPtr<T>::expired() const noexcept {
-    if (controlBlock_) {
-        return useCount() == 0;
-    }
-    return true;
+    return useCount() == 0;
 }
 
 template <typename T>
